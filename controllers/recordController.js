@@ -91,7 +91,7 @@ function generateRecordQuery(joinConditions, whereConditions) {   // Function to
 select_query = `
   SELECT record.RecordID, record.PatientID, record.RDate, record.Weight, record.Length, record.ClinicID,
   services.ServicesID, services.ServicesDescription,
-  recommendAction.RecommendedActionID, recommendAction.RecommendedActionDescription,
+  recommendaction.RecommendedActionID, recommendaction.RecommendedActionDescription,
   vital.VitalID, vital.BloodPressure, vital.RespirationRate, vital.HeartRate, vital.DiabeticTest, vital.SPO2,
   vaccines.VaccinesID, vaccines.VName, vaccines.VType, vaccines.VDate,
   eyemeasurement.EyeMeasurementID, eyemeasurement.LeftEye, eyemeasurement.RightEye,
@@ -99,7 +99,7 @@ select_query = `
 
   FROM record
   LEFT JOIN services ON record.RecordID = services.RecordID
-  LEFT JOIN recommendAction ON record.RecordID = recommendAction.RecordID
+  LEFT JOIN recommendaction ON record.RecordID = recommendaction.RecordID
   LEFT JOIN vital ON record.RecordID = vital.RecordID
   LEFT JOIN vaccines ON record.RecordID = vaccines.RecordID
   LEFT JOIN eyemeasurement ON record.RecordID = eyemeasurement.RecordID
