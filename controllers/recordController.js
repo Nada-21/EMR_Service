@@ -97,13 +97,13 @@ select_query = `
   eyemeasurement.EyeMeasurementID, eyemeasurement.LeftEye, eyemeasurement.RightEye,
   nutrition.NutritionID, nutrition.DietPlan, nutrition.Inbody
 
-  FROM Record
-  LEFT JOIN Services ON record.RecordID = services.RecordID
-  LEFT JOIN RecommendedAction ON record.RecordID = recommendAction.RecordID
-  LEFT JOIN Vital ON record.RecordID = vital.RecordID
-  LEFT JOIN Vaccines ON record.RecordID = vaccines.RecordID
-  LEFT JOIN EyeMeasurement ON record.RecordID = eyemeasurement.RecordID
-  LEFT JOIN Nutrition ON record.RecordID = nutrition.RecordID
+  FROM record
+  LEFT JOIN services ON record.RecordID = services.RecordID
+  LEFT JOIN recommendAction ON record.RecordID = recommendAction.RecordID
+  LEFT JOIN vital ON record.RecordID = vital.RecordID
+  LEFT JOIN vaccines ON record.RecordID = vaccines.RecordID
+  LEFT JOIN eyemeasurement ON record.RecordID = eyemeasurement.RecordID
+  LEFT JOIN nutrition ON record.RecordID = nutrition.RecordID
   ${joinConditions}
   WHERE record.RecordID IS NOT NULL ${whereConditions}` ;
 
