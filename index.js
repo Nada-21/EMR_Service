@@ -9,7 +9,7 @@ const PrescriptionRoute = require('./routes/prescriptionRouter');
 const medicalHistoryRoute = require('./routes/historyRouter');
 
 const EMR_app = express();
-const PORT = 5000;
+const PORT = process.env.PORT;
 
 //====================================================================
 EMR_app.listen(PORT, () => {
