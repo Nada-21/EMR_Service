@@ -4,19 +4,19 @@ const connection = require('../DataBase/connection'); // Import the connection m
 function generateRecordQuery(joinConditions, whereConditions) {   // Function to generate the common SQL query for retrieving mwdical history
 
   select_query = `
-  SELECT MedicalHistory.PatientID,
-  Illnesses.IllnessID, Illnesses.IllnessDescription,
-  Operations.OperationID, Operations.OperationName, Operations.OperationDate,
-  MedicalTests.TestID, MedicalTests.TestName, MedicalTests.TestResult,
-  Complaints.ComplaintID, Complaints.ComplaintDescription
+  SELECT medicalhistory.PatientID,
+  illnesses.IllnessID, illnesses.IllnessDescription,
+  operations.OperationID, operations.OperationName, operations.OperationDate,
+  medicaltests.TestID, medicaltests.TestName, medicaltests.TestResult,
+  complaints.ComplaintID, complaints.ComplaintDescription
 
-  FROM MedicalHistory
-  LEFT JOIN Illnesses ON MedicalHistory.PatientID = Illnesses.PatientID
-  LEFT JOIN Operations ON MedicalHistory.PatientID = Operations.PatientID
-  LEFT JOIN MedicalTests ON MedicalHistory.PatientID = MedicalTests.PatientID
-  LEFT JOIN Complaints ON MedicalHistory.PatientID = Complaints.PatientID
+  FROM medicalhistory
+  LEFT JOIN illnesses ON medicalhistory.PatientID = illnesses.PatientID
+  LEFT JOIN operations ON medicalhistory.PatientID = operations.PatientID
+  LEFT JOIN medicaltests ON medicalhistory.PatientID = medicaltests.PatientID
+  LEFT JOIN complaints ON medicalhistory.PatientID = complaints.PatientID
   ${joinConditions}
-  WHERE MedicalHistory.PatientID IS NOT NULL ${whereConditions}`;
+  WHERE medicalhistory.PatientID IS NOT NULL ${whereConditions}`;
 
   return  select_query;
 }
@@ -36,7 +36,7 @@ function getMedicalhistory (req, res)  {         //Get All medical histories
 //==================================================================================================================
 function getMedicalhistoryByPatientID(req, res) {     //Get medical history with id
   const patientID = req.params.patientID;
-  const sql_query = generateRecordQuery('', `AND MedicalHistory.PatientID = ${patientID}`);
+  const sql_query = generateRecordQuery('', `AND medicalhistory.PatientID = ${patientID}`);
 
   connection.query(sql_query, (err, result) => {
     if (err) throw err;
@@ -100,7 +100,7 @@ function createMedicalHistory(req, res) {
   const { PatientID,Illnesses,Operations,MedicalTests, Complaints} = req.body;
 
   // ..................Check for existing PatientID in the MedicalHistory table
-  const checkMedicalHistoryQuery = `SELECT * FROM MedicalHistory WHERE PatientID = ?`;
+  const checkMedicalHistoryQuery = `SELECT * FROM medicalhistory WHERE PatientID = ?`;
 
   connection.query(checkMedicalHistoryQuery, [PatientID], (checkPatientErr, PatientResult) => {
     if (checkPatientErr) {
@@ -117,10 +117,10 @@ function createMedicalHistory(req, res) {
       console.log("PatientID already exists in the MedicalHistory table");
   
     Promise.all([
-      insertDataIntoTable('Illnesses', ['PatientID', 'IllnessDescription'], Illnesses, PatientID),
-      insertDataIntoTable('Operations', ['PatientID', 'OperationName', 'OperationDate'], Operations, PatientID),
-      insertDataIntoTable('MedicalTests', ['PatientID', 'TestName', 'TestResult'], MedicalTests, PatientID),
-      insertDataIntoTable('Complaints', ['PatientID', 'ComplaintDescription'], Complaints, PatientID),
+      insertDataIntoTable('illnesses', ['PatientID', 'IllnessDescription'], Illnesses, PatientID),
+      insertDataIntoTable('operations', ['PatientID', 'OperationName', 'OperationDate'], Operations, PatientID),
+      insertDataIntoTable('medicaltests', ['PatientID', 'TestName', 'TestResult'], MedicalTests, PatientID),
+      insertDataIntoTable('complaints', ['PatientID', 'ComplaintDescription'], Complaints, PatientID),
     ])
       .then(() => {
         // Respond with success message

@@ -57,7 +57,7 @@ function getRecord (req, res)  {         //Get All Records
 //==================================================================================================================
 function getRecordByRecordID(req, res) {
   const recordID = req.params.recordID;
-  const sql_query = generateRecordQuery('', `AND Record.RecordID = ${recordID}`);
+  const sql_query = generateRecordQuery('', `AND record.RecordID = ${recordID}`);
 
   connection.query(sql_query, (err, result) => {
     if (err) throw err;
@@ -72,7 +72,7 @@ function getRecordByRecordID(req, res) {
 //==================================================================================================================
 function getRecordByPatientID(req, res) {
   const patientID = req.params.patientID;
-  const sql_query = generateRecordQuery('', `AND Record.PatientID = ${patientID}`);
+  const sql_query = generateRecordQuery('', `AND record.PatientID = ${patientID}`);
 
   connection.query(sql_query, (err, result) => {
     if (err) throw err;
@@ -89,23 +89,23 @@ function getRecordByPatientID(req, res) {
 function generateRecordQuery(joinConditions, whereConditions) {   // Function to generate the common SQL query for retrieving records
 
 select_query = `
-  SELECT Record.RecordID, Record.PatientID, Record.RDate, Record.Weight, Record.Length, Record.ClinicID,
-  Services.ServicesID, Services.ServicesDescription,
-  RecommendedAction.RecommendedActionID, RecommendedAction.RecommendedActionDescription,
-  Vital.VitalID, Vital.BloodPressure, Vital.RespirationRate, Vital.HeartRate, Vital.DiabeticTest, Vital.SPO2,
-  Vaccines.VaccinesID, Vaccines.VName, Vaccines.VType, Vaccines.VDate,
-  EyeMeasurement.EyeMeasurementID, EyeMeasurement.LeftEye, EyeMeasurement.RightEye,
-  Nutrition.NutritionID, Nutrition.DietPlan, Nutrition.Inbody
+  SELECT record.RecordID, record.PatientID, record.RDate, record.Weight, record.Length, record.ClinicID,
+  services.ServicesID, services.ServicesDescription,
+  recommendAction.RecommendedActionID, recommendAction.RecommendedActionDescription,
+  vital.VitalID, vital.BloodPressure, vital.RespirationRate, vital.HeartRate, vital.DiabeticTest, vital.SPO2,
+  vaccines.VaccinesID, vaccines.VName, vaccines.VType, vaccines.VDate,
+  eyemeasurement.EyeMeasurementID, eyemeasurement.LeftEye, eyemeasurement.RightEye,
+  nutrition.NutritionID, nutrition.DietPlan, nutrition.Inbody
 
   FROM Record
-  LEFT JOIN Services ON Record.RecordID = Services.RecordID
-  LEFT JOIN RecommendedAction ON Record.RecordID = RecommendedAction.RecordID
-  LEFT JOIN Vital ON Record.RecordID = Vital.RecordID
-  LEFT JOIN Vaccines ON Record.RecordID = Vaccines.RecordID
-  LEFT JOIN EyeMeasurement ON Record.RecordID = EyeMeasurement.RecordID
-  LEFT JOIN Nutrition ON Record.RecordID = Nutrition.RecordID
+  LEFT JOIN Services ON record.RecordID = services.RecordID
+  LEFT JOIN RecommendedAction ON record.RecordID = recommendAction.RecordID
+  LEFT JOIN Vital ON record.RecordID = vital.RecordID
+  LEFT JOIN Vaccines ON record.RecordID = vaccines.RecordID
+  LEFT JOIN EyeMeasurement ON record.RecordID = eyemeasurement.RecordID
+  LEFT JOIN Nutrition ON record.RecordID = nutrition.RecordID
   ${joinConditions}
-  WHERE Record.RecordID IS NOT NULL ${whereConditions}` ;
+  WHERE record.RecordID IS NOT NULL ${whereConditions}` ;
 
   return  select_query;
 }
@@ -162,7 +162,7 @@ function processQueryResult(result) {          //Function to process the query r
 }
 //=====================================================================================================================
 function insertRecord(PatientID, RDate, Weight, Length, ClinicID, res, callback) {
-  const sql_query_Record = "INSERT INTO Record (PatientID, RDate, Weight, Length, ClinicID) VALUES (?, ?, ?, ?, ?)";
+  const sql_query_Record = "INSERT INTO record (PatientID, RDate, Weight, Length, ClinicID) VALUES (?, ?, ?, ?, ?)";
   connection.query(sql_query_Record, [PatientID, RDate, Weight, Length, ClinicID], (RecordErr, RecordResult) => {
     if (RecordErr) {
       console.error("Error creating Record:", RecordErr);
@@ -176,7 +176,7 @@ function insertRecord(PatientID, RDate, Weight, Length, ClinicID, res, callback)
 }
 //==============================================================================================================
 function insertServices(RecordID,ServicesDescription,res, callback) {
-  const sql_query_Services = `INSERT INTO Services (RecordID,ServicesDescription) VALUES (?, ?)`;
+  const sql_query_Services = `INSERT INTO services (RecordID,ServicesDescription) VALUES (?, ?)`;
   connection.query(sql_query_Services, [RecordID,ServicesDescription], (ServicesErr, ServicesResult) => {
     if (ServicesErr) {
       console.error("Error creating Services:", ServicesErr);
@@ -191,7 +191,7 @@ function insertServices(RecordID,ServicesDescription,res, callback) {
 }
 //==============================================================================================================
 function insertRecommendedAction(RecordID,RecommendedActionDescription,res, callback) {
-  const sql_query_RecommendedAction = `INSERT INTO RecommendedAction (RecordID,RecommendedActionDescription) VALUES ( ?, ?)`;
+  const sql_query_RecommendedAction = `INSERT INTO recommendedaction (RecordID,RecommendedActionDescription) VALUES ( ?, ?)`;
   connection.query(sql_query_RecommendedAction, [RecordID,RecommendedActionDescription], (RecommendedActionErr, RecommendedActionResult) => {
     if (RecommendedActionErr) {
       console.error("Error creating RecommendedAction:", RecommendedActionErr);
@@ -206,7 +206,7 @@ function insertRecommendedAction(RecordID,RecommendedActionDescription,res, call
 }
 //==============================================================================================================
 function insertVital(RecordID, Vital, res, callback) {
-  const sql_query_Vital = `INSERT INTO Vital (RecordID, BloodPressure, RespirationRate, HeartRate, DiabeticTest, SPO2) VALUES ( ?, ?, ?, ?, ?, ?)`;
+  const sql_query_Vital = `INSERT INTO vital (RecordID, BloodPressure, RespirationRate, HeartRate, DiabeticTest, SPO2) VALUES ( ?, ?, ?, ?, ?, ?)`;
 
   connection.query(sql_query_Vital,[RecordID, Vital.BloodPressure, Vital.RespirationRate, Vital.HeartRate, Vital.DiabeticTest, Vital.SPO2],(vitalErr, vitalResult) => {
     if (vitalErr) {
@@ -221,7 +221,7 @@ function insertVital(RecordID, Vital, res, callback) {
 }
 //==============================================================================================================
 function insertVaccines(RecordID, Vaccines, res, callback) {
-  const sql_query_Vaccines = `INSERT INTO Vaccines (RecordID, VName, VType, VDate ) VALUES ( ?, ?, ?, ?)`;
+  const sql_query_Vaccines = `INSERT INTO vaccines (RecordID, VName, VType, VDate ) VALUES ( ?, ?, ?, ?)`;
   Promise.all(
     Vaccines.map((vaccine) => {
       return new Promise((resolve, reject) => {
@@ -248,7 +248,7 @@ function insertVaccines(RecordID, Vaccines, res, callback) {
 }
 //==============================================================================================================
 function insertEyeMeasurement(RecordID, EyeMeasurements, res, callback) {
-  const sql_query_EyeMeasurement = `INSERT INTO EyeMeasurement (RecordID, LeftEye, RightEye) VALUES ( ?, ?, ?)`;
+  const sql_query_EyeMeasurement = `INSERT INTO eyemeasurement (RecordID, LeftEye, RightEye) VALUES ( ?, ?, ?)`;
 
   connection.query(sql_query_EyeMeasurement,[RecordID, EyeMeasurements.LeftEye, EyeMeasurements.RightEye],(eyeMeasurementErr, eyeMeasurementResult) => {
     if (eyeMeasurementErr) {
@@ -264,7 +264,7 @@ function insertEyeMeasurement(RecordID, EyeMeasurements, res, callback) {
 
 //==============================================================================================================
 function insertNutrition(RecordID, NutritionData, res,callback) {
-  const sql_query_Nutrition = `INSERT INTO Nutrition (RecordID, DietPlan, Inbody) VALUES ( ?, ?, ?)`;
+  const sql_query_Nutrition = `INSERT INTO nutrition (RecordID, DietPlan, Inbody) VALUES ( ?, ?, ?)`;
   connection.query(sql_query_Nutrition,[RecordID, NutritionData.DietPlan, NutritionData.Inbody],(nutritionDataErr, nutritionDataResult) => {
     if (nutritionDataErr) {
       console.error("Error creating Nutrition:", nutritionDataErr);
