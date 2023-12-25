@@ -13,12 +13,18 @@ const EMR_app = express();
 const PORT =  process.env.PORT;
 
 //====================================================================
-EMR_app.listen(PORT, () => {
+EMR_app.listen(PORT, async () => {
   console.log(`SERVER: http://localhost:${PORT}`);
-  connectionModule.connect((err) => {
-    if (err) throw err;
+
+  try {
+    // Get a connection from the pool to check the database connection
+    const connection = await connectionModule.getConnection();
+    connection.release();
     console.log('DATABASE CONNECTED');
-  });
+  } catch (err) {
+    console.error('Error connecting to the database:', err);
+    process.exit(1); // Exit the application if there's an error connecting to the database
+  }
 });
 //====================================================================
 EMR_app.use(express.json());
