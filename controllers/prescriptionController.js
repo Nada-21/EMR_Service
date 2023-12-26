@@ -146,7 +146,7 @@ function insertDrugs(insertedPrescriptionID,PatientID, Drugs,callback) {        
 
   // handling asynchronous insertion of multiple drugs
   Promise.all(Drugs.map((drug) => { return new Promise((resolve, reject) => {
-    connection.query(sql_query_Drug,[insertedPrescriptionID,PatientID, drug.DName, drug.DDuration, drug.DDose],(drugErr, drugResult) => {
+    connection.query(sql_query_Drug,[insertedPrescriptionID,PatientID, drug.DrugName, drug.DrugDuration, drug.DrugDose],(drugErr, drugResult) => {
       if (drugErr) {
         console.error(`Error creating Drug`, drugErr);
         reject(drugErr);

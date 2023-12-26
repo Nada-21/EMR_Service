@@ -235,7 +235,7 @@ function insertVaccines(RecordID, Vaccines,callback) {  //insert into Vaccines t
   Promise.all(
     Vaccines.map((vaccine) => {
       return new Promise((resolve, reject) => {
-        connection.query(sql_query_Vaccines,[RecordID, vaccine.VName, vaccine.VType, vaccine.VDate],(vaccinesErr, vaccinesResult) => {
+        connection.query(sql_query_Vaccines,[RecordID, vaccine.VaccineName, vaccine.VaccineType, vaccine.VaccineDate],(vaccinesErr, vaccinesResult) => {
           if (vaccinesErr) {
             console.error("Error creating Vaccine:", vaccinesErr);
             reject(vaccinesErr);
