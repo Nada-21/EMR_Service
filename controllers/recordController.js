@@ -31,7 +31,7 @@ async function createRecord(req, res) {   //Create new record
       return res.status(404).json({ message:`This appointment belongs to undefined clinic` });
     }
 
-    const responseClinicName = responseClinic?.data?.data?.clinic?.name;    //Get clinicName from clinic service
+    const responseClinicName = responseClinic?.data?.data?.clinics?.name;    //Get clinicName from clinic service
 
     // Check if PatientID exists in MedicalHistory table
     const checkMedicalHistoryQuery = `SELECT * FROM medicalhistory WHERE PatientID = ?`;

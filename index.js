@@ -15,7 +15,7 @@ EMR_app.use(cors());
 const PORT =  process.env.PORT || 3000;
 
 //====================================================================
-EMR_app.use(cors({
+EMR_app.use(cors({                     
   origin: 'http://localhost:3000',
 }));
 
