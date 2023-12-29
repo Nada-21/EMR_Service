@@ -113,7 +113,7 @@ async function createMedicalHistory(req, res) {
   try {
     // Check if PatientID exists
     const registerationUrl = process.env.REGISTERATION_API_URL;
-    const response = await axios.get(`${registerationUrl}/user/patient/${PatientID}`).catch(() => null);
+    const response = await axios.get(`${registerationUrl}/patient/${PatientID}`).catch(() => null);
 
     if (!response || !response.data) {
       console.log(`PatientID ${PatientID} is not found in Registeration List`);
