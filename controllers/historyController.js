@@ -4,7 +4,7 @@ require('dotenv').config();
 // ============================================================================================================
 function generateRecordQuery(joinConditions, whereConditions) {   // Function to generate the common SQL query for retrieving mwdical history
   select_query = `
-  SELECT medicalhistory.PatientID,
+  SELECT medicalhistory.PatientID, medicalhistory.CreatedAt, 
   illnesses.IllnessID, illnesses.IllnessDescription,
   operations.OperationID, operations.OperationName, operations.OperationDate,
   medicaltests.TestID, medicaltests.TestDescription,
@@ -66,6 +66,7 @@ function processQueryResult(result) {          //Function to process the query r
     if (!patientsMap[PatientID]) {
       patientsMap[PatientID] = {
         PatientID,
+        CreatedAt: row.CreatedAt,
         Illnesses: [],
         Operations: [],
         MedicalTests: [],

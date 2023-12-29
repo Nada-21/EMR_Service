@@ -125,7 +125,7 @@ function getRecordByPatientID(req, res) {  //Get All Record By patientID
 // ============================================================================================================
 function generateRecordQuery(joinConditions, whereConditions) {   // Function to generate the common SQL query for retrieving records
 select_query = `
-  SELECT record.RecordID, record.PatientID, record.AppointmentID, record.ClinicID, record.RDate, record.Weight, record.Length, 
+  SELECT record.RecordID, record.PatientID, record.AppointmentID, record.ClinicID, record.RDate, record.Weight, record.Length, record.CreatedAt, 
   services.ServicesID, services.ServicesDescription,
   recommendedaction.RecommendedActionID, recommendedaction.RecommendedActionDescription,
   vital.VitalID, vital.BloodPressure, vital.RespirationRate, vital.HeartRate, vital.DiabeticTest, vital.SPO2,
@@ -159,6 +159,7 @@ function processQueryResult(result) {          //Function to process the query r
         RecordDate: row.RDate,
         PatientWeight: row.Weight,
         PatientHeight: row.Length,
+        CreatedAt: row.CreatedAt,
         Services: [],
         RecommendedAction: [],
         Vital: [],

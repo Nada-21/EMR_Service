@@ -95,7 +95,7 @@ function getPrescriptionByPatientID (req, res){   // Get prescription by patient
 function generatePrescriptionQuery(joinConditions, whereConditions) {   // Function to generate the common SQL query for retrieving prescriptions
   const sql_query = `
     SELECT prescription.PrescriptionID, prescription.PatientID, prescription.AppointmentID,  prescription.DoctorName, prescription.Diagnosis, prescription.ExtraNotes, 
-    drug.DrugID, drug.DName, drug.DDuration, drug.DDose
+    prescription.CreatedAt, drug.DrugID, drug.DName, drug.DDuration, drug.DDose
     FROM prescription
     LEFT JOIN drug ON prescription.PrescriptionID = drug.PrescriptionID
     ${joinConditions}
@@ -117,6 +117,7 @@ function processQueryResult(result) {          //Function to process the query r
         DoctorName: row.DoctorName,
         Diagnosis: row.Diagnosis,
         ExtraNotes: row.ExtraNotes,
+        CreatedAt: row.CreatedAt,
         drug: []
       };
     }
