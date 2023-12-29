@@ -40,7 +40,6 @@ function getMedicalhistory (req, res)  {         //Get All medical histories
 function getMedicalhistoryByPatientID(req, res) {     //Get medical history with id
   const patientID = req.params.patientId;
   const sql_query = generateRecordQuery('', `AND medicalhistory.PatientID = ${patientID}`);
-
   connection.query(sql_query, (err, result) => {
     if (err) throw err;
     if (result.length === 0) {
@@ -208,7 +207,6 @@ async function createMedicalHistory(req, res) {
 //==============================================================================================================
 function insertDataIntoTable(tableName, columns, data,ID) {
   const sqlQuery = `INSERT INTO ${tableName} (${columns.join(', ')}) VALUES (${columns.map(() => '?').join(', ')})`;
-
   return Promise.all(
     data.map((item) => {
       return new Promise((resolve, reject) => {

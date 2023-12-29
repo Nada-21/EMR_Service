@@ -148,10 +148,8 @@ select_query = `
 //==========================================================================================================================
 function processQueryResult(result) {          //Function to process the query result and build the record map
   const recordMap = {};
-
   result.forEach((row) => {
     const { RecordID, ServicesID, RecommendedActionID, VitalID, VaccinesID, EyeMeasurementID, NutritionID } = row;
-
     if (!recordMap[RecordID]) {
       recordMap[RecordID] = {
         RecordID,
@@ -248,12 +246,12 @@ function insertVaccines(RecordID, Vaccines,callback) {  //insert into Vaccines t
       });
     })
   )
-    .then(() => {
-      callback();
-    })
-    .catch((error) => {
-      console.error("Error inserting Vaccine data:", error);
-    });
+  .then(() => {
+    callback();
+  })
+  .catch((error) => {
+    console.error("Error inserting Vaccine data:", error);
+  });
 }
 //==============================================================================================================
 async function insertEyeMeasurement(RecordID, EyeMeasurements,callback) {   //insert into EyeMeasurement table
