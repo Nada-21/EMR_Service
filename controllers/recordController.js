@@ -137,6 +137,15 @@ function generateRecordQuery(joinConditions, whereConditions) {   // Function to
 function processQueryResult(result) {          //Function to process the query result and build the record map
   const recordMap = {};
 
+  // Create a set to store unique IDs for each type
+  const uniqueServicesIDs = new Set();
+  const uniqueRecommendedActionIDs = new Set();
+  const uniqueVitalIDs = new Set();
+  const uniqueVaccinesIDs = new Set();
+  const uniqueEyeMeasurementIDs = new Set();
+  const uniqueNutritionIDs = new Set();
+  const uniqueIDs = new Set();
+
   result.forEach((row) => {
     const { RecordID, ServicesID, RecommendedActionID, VitalID, VaccinesID, EyeMeasurementID, NutritionID, ID } = row;
 
@@ -159,34 +168,40 @@ function processQueryResult(result) {          //Function to process the query r
         Nutrition: [],
       };
     }
-    if (ServicesID != null) {        // Check if ServicesID is not null 
+    if (ServicesID != null && !uniqueServicesIDs.has(ServicesID)) {        // Check if ServicesID is not null 
+      uniqueServicesIDs.add(ServicesID);
       recordMap[RecordID].Services.push({ ServicesDescription: row.ServicesDescription });
     }
 
-    if (RecommendedActionID != null) {       // Check if RecommendedActionID is not null 
+    if (RecommendedActionID != null && !uniqueRecommendedActionIDs.has(RecommendedActionID)) {        // Check if RecommendedActionID is not null 
+      uniqueRecommendedActionIDs.add(RecommendedActionID);
       recordMap[RecordID].RecommendedAction.push({ RecommendedActionDescription: row.RecommendedActionDescription });
     }
 
-    if (ID != null) {        // Check if TestID is not null
+    if (ID != null && !uniqueIDs.has(ID)) {        // Check if ID is not null 
+      uniqueIDs.add(ID);
       recordMap[RecordID].MedicalTests.push({ TestID: row.TestID, TestDescription: row.TestDescription });
     }
 
-    if (VitalID != null) {       // Check if VitalID is not null 
-      recordMap[RecordID].Vital.push({
-        BloodPressure: row.BloodPressure, RespirationRate: row.RespirationRate, HeartRate: row.HeartRate,
+    if (VitalID != null && !uniqueVitalIDs.has(VitalID)) {        // Check if VitalID is not null 
+      uniqueVitalIDs.add(VitalID);
+      recordMap[RecordID].Vital.push({BloodPressure: row.BloodPressure, RespirationRate: row.RespirationRate, HeartRate: row.HeartRate,
         DiabeticTest: row.DiabeticTest, SPO2: row.SPO2,
       });
     }
 
-    if (VaccinesID != null) {      // Check if VaccinesID is not null 
+    if (VaccinesID != null && !uniqueVaccinesIDs.has(VaccinesID)) {        // Check if VaccinesID is not null 
+      uniqueVaccinesIDs.add(VaccinesID);
       recordMap[RecordID].Vaccines.push({ VaccineName: row.VName, VaccineType: row.VType, VaccineDate: row.VDate });
     }
 
-    if (EyeMeasurementID != null) {       // Check if EyeMeasurementID is not null 
+    if (EyeMeasurementID != null && !uniqueEyeMeasurementIDs.has(EyeMeasurementID)) {        // Check if EyeMeasurementID is not null 
+      uniqueEyeMeasurementIDs.add(EyeMeasurementID);
       recordMap[RecordID].EyeMeasurement.push({ LeftEye: row.LeftEye, RightEye: row.RightEye });
     }
 
-    if (NutritionID != null) {        // Check if NutritionID is not null
+    if (NutritionID != null && !uniqueNutritionIDs.has(NutritionID)) {        // Check if NutritionID is not null 
+      uniqueNutritionIDs.add(NutritionID);
       recordMap[RecordID].Nutrition.push({ DietPlan: row.DietPlan, Inbody: row.Inbody });
     }
   });
