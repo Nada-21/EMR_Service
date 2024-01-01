@@ -118,7 +118,7 @@ function generateRecordQuery(joinConditions, whereConditions) {   // Function to
   vaccines.VaccinesID, vaccines.VName, vaccines.VType, vaccines.VDate,
   eyemeasurement.EyeMeasurementID, eyemeasurement.LeftEye, eyemeasurement.RightEye,
   nutrition.NutritionID, nutrition.DietPlan, nutrition.Inbody,
-  medicaltests.TestID, medicaltests.TestDescription,
+  medicaltests.TestID, medicaltests.TestDescription
 
   FROM record
   LEFT JOIN services ON record.RecordID = services.RecordID
