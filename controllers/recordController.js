@@ -118,7 +118,7 @@ function generateRecordQuery(joinConditions, whereConditions) {   // Function to
   vaccines.VaccinesID, vaccines.VName, vaccines.VType, vaccines.VDate,
   eyemeasurement.EyeMeasurementID, eyemeasurement.LeftEye, eyemeasurement.RightEye,
   nutrition.NutritionID, nutrition.DietPlan, nutrition.Inbody,
-  medicaltests.TestID, medicaltests.TestDescription
+  medicaltests.ID, medicaltests.TestID, medicaltests.TestDescription
 
   FROM record
   LEFT JOIN services ON record.RecordID = services.RecordID
@@ -138,7 +138,7 @@ function processQueryResult(result) {          //Function to process the query r
   const recordMap = {};
 
   result.forEach((row) => {
-    const { RecordID, ServicesID, RecommendedActionID, VitalID, VaccinesID, EyeMeasurementID, NutritionID, TestID } = row;
+    const { RecordID, ServicesID, RecommendedActionID, VitalID, VaccinesID, EyeMeasurementID, NutritionID, ID } = row;
 
     if (!recordMap[RecordID]) {
       recordMap[RecordID] = {
@@ -167,7 +167,7 @@ function processQueryResult(result) {          //Function to process the query r
       recordMap[RecordID].RecommendedAction.push({ RecommendedActionDescription: row.RecommendedActionDescription });
     }
 
-    if (TestID != null) {        // Check if TestID is not null
+    if (ID != null) {        // Check if TestID is not null
       recordMap[RecordID].MedicalTests.push({ TestID: row.TestID, TestDescription: row.TestDescription });
     }
 
