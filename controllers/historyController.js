@@ -123,9 +123,9 @@ const complaintSchema = Joi.object({   // Schema for each complaint object
   ComplaintDescription: Joi.string().allow('').required(),
 });
 const drugSchema = Joi.object({   // Schema for each drug object
-  DName: Joi.string().allow('').required(),
-  DDuration: Joi.string().allow('').required(),
-  DDose: Joi.string().allow('').required(),
+  DrugName: Joi.string().allow('').required(),
+  DrugDuration: Joi.string().allow('').required(),
+  DrugDose: Joi.string().allow('').required(),
 });
 const patientHistorySchema = Joi.object({    // Schema for the entire input JSON
   PatientID: Joi.number().required(),
