@@ -55,7 +55,7 @@ async function createPrescription(req, res) {
     }
     
     insertPrescription(PatientID, AppointmentID, DoctorName, Diagnosis, ExtraNotes,(insertedPrescriptionID) => {
-      if (Drugs.length > 0){
+      if (Drugs && Drugs.length > 0){
         insertDrugs(insertedPrescriptionID,PatientID, Drugs,() => {});
       }
       console.log( "Prescription with Drugs is created successfully");

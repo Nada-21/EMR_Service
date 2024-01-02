@@ -89,10 +89,10 @@ async function createRecord(req, res) {
       if (RecommendedActionDescription !== "") {   //Check if patient had a recommended action in the clinic (Not NULL)
         insertRecommendedAction(insertedRecordID, RecommendedActionDescription, () => {});
       }
-      if (MedicalTests.length > 0) {   //Check if DR told patient to do any test 
+      if (MedicalTests && MedicalTests.length > 0) {   //Check if DR told patient to do any test 
         insertMedicalTests(PatientID, insertedRecordID, MedicalTests, () => {});
       }
-      if (Vaccines.length > 0) {
+      if (Vaccines && Vaccines.length > 0) {
         insertVaccines(insertedRecordID, Vaccines, () => {});
       }
       if (EyeMeasurements != null && Object.keys(EyeMeasurements).length !== 0) {
