@@ -1,4 +1,5 @@
 const axios = require('axios');
+const Joi = require('joi');
 const connection = require('../DataBase/connection'); // Import the connection module 
 require('dotenv').config();
 // ============================================================================================================
@@ -106,8 +107,43 @@ function processQueryResult(result) {          //Function to process the query r
   });
   return Object.values(patientsMap);
 }
-// .==================================== Create operation (POST) ================================================
+//================================================ Schema ==============================================================
+const illnessSchema = Joi.object({ // Schema for each illness object
+  IllnessDescription: Joi.string().allow('').required(),
+});
+const operationSchema = Joi.object({   // Schema for each operation object
+  OperationName: Joi.string().allow('').required(),
+  OperationDate: Joi.date().allow('').required(), 
+});
+const medicalTestSchema = Joi.object({    // Schema for each medical test object
+  TestID: Joi.number().allow('').required(),
+  TestDescription: Joi.string().allow('').required(),
+});
+const complaintSchema = Joi.object({   // Schema for each complaint object
+  ComplaintDescription: Joi.string().allow('').required(),
+});
+const drugSchema = Joi.object({   // Schema for each drug object
+  DName: Joi.string().allow('').required(),
+  DDuration: Joi.string().allow('').required(),
+  DDose: Joi.string().allow('').required(),
+});
+const patientHistorySchema = Joi.object({    // Schema for the entire input JSON
+  PatientID: Joi.number().required(),
+  Illnesses: Joi.array().items(illnessSchema).default([]),
+  Operations: Joi.array().items(operationSchema).default([]),
+  MedicalTests: Joi.array().items(medicalTestSchema).default([]),
+  Complaints: Joi.array().items(complaintSchema).default([]),
+  Drugs: Joi.array().items(drugSchema).default([]),
+});
+
+// ==================================== Create operation (POST) ================================================
 async function createMedicalHistory(req, res) {
+  const { error } = patientHistorySchema.validate(req.body);    // Validate the request body
+
+  if (error) {
+    return res.status(400).json({ message: error.details[0].message });
+  }
+
   const { PatientID, Illnesses, Operations, MedicalTests, Complaints, Drugs } = req.body;
 
   try {
